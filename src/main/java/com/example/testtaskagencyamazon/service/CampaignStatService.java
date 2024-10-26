@@ -45,8 +45,9 @@ public class CampaignStatService {
     for (SPCampaignReport report : reports) {
       Long campaignId = report.getCampaignId();
 
-      campaignAnalyticMap.computeIfAbsent(campaignId, k -> new SPCampaignStatistic(report))
-          .add(new SPCampaignStatistic(report));
+      SPCampaignStatistic newStatistic = new SPCampaignStatistic(report);
+
+      campaignAnalyticMap.merge(campaignId, newStatistic, SPCampaignStatistic::add);
     }
 
     // Get all enabled SP campaigns by profile and portfolio
